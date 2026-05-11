@@ -138,7 +138,7 @@
           <a class="btn btn-primary" href="https://wa.me/5562994271435?text=Ola%2C%20quero%20conhecer%20mais%20sobre%20os%20servicos%20eletricos." target="_blank" rel="noopener noreferrer">Falar com especialista</a>
         </div>
         <figure class="service-rotator reveal">
-          <a id="service-rotator-link" href="images/logo.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir foto em tamanho completo">
+          <a id="service-rotator-link" class="js-open-lightbox" data-index="0" href="images/logo.png" aria-label="Abrir galeria estendida">
             <img id="service-rotator-image" src="images/logo.png" alt="Fotos dos servicos eletricos da EG Eletrica">
           </a>
           <figcaption id="service-rotator-caption">Carregando galeria de servicos...</figcaption>
@@ -177,6 +177,20 @@
       <p>Desenvolvido por EJtech</p>
     </div>
   </footer>
+
+  <div id="extended-gallery" class="lightbox" hidden aria-hidden="true">
+    <div class="lightbox-backdrop" data-close-lightbox></div>
+    <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Galeria estendida de servicos">
+      <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fechar galeria">X</button>
+      <button id="lightbox-prev" class="lightbox-nav lightbox-prev" type="button" aria-label="Foto anterior">&lt;</button>
+      <figure class="lightbox-figure">
+        <img id="lightbox-image" src="" alt="Foto completa do servico">
+        <figcaption id="lightbox-caption"></figcaption>
+      </figure>
+      <button id="lightbox-next" class="lightbox-nav lightbox-next" type="button" aria-label="Proxima foto">&gt;</button>
+      <div id="lightbox-thumbs" class="lightbox-thumbs"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

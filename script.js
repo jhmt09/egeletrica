@@ -74,7 +74,7 @@ if (galleryTrack && galleryNext && galleryPrev && photoPaths.length > 0) {
     .map(
       (path, index) => `
         <figure class="gallery-slide">
-          <a class="gallery-image-link" href="${path}" target="_blank" rel="noopener noreferrer" aria-label="Abrir foto ${index + 1} em tamanho completo">
+          <a class="gallery-image-link js-open-lightbox" href="${path}" data-index="${index}" aria-label="Abrir galeria estendida na foto ${index + 1}">
             <img src="${path}" alt="Galeria de servicos eletricos ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}">
           </a>
           <figcaption>Registro ${index + 1} de ${photoPaths.length}</figcaption>
@@ -135,6 +135,7 @@ if (rotatorImage && rotatorCaption && rotatorLink && photoPaths.length > 0) {
     window.setTimeout(() => {
       rotatorImage.src = photoPaths[currentPhoto];
       rotatorLink.href = photoPaths[currentPhoto];
+      rotatorLink.dataset.index = String(currentPhoto);
       rotatorCaption.textContent = `Conheca nosso servico - foto ${currentPhoto + 1} de ${photoPaths.length}`;
       rotatorImage.classList.remove('is-fading');
     }, 180);
@@ -146,4 +147,126 @@ if (rotatorImage && rotatorCaption && rotatorLink && photoPaths.length > 0) {
     currentPhoto = (currentPhoto + 1) % photoPaths.length;
     updateRotator();
   }, 3400);
+}
+
+const lightbox = document.getElementById('extended-gallery');
+const lightboxImage = document.getElementById('lightbox-image');
+const lightboxCaption = document.getElementById('lightbox-caption');
+const lightboxThumbs = document.getElementById('lightbox-thumbs');
+const lightboxClose = document.getElementById('lightbox-close');
+const lightboxPrev = document.getElementById('lightbox-prev');
+const lightboxNext = document.getElementById('lightbox-next');
+
+if (
+  lightbox &&
+  lightboxImage &&
+  lightboxCaption &&
+  lightboxThumbs &&
+  lightboxClose &&
+  lightboxPrev &&
+  lightboxNext &&
+  photoPaths.length > 0
+) {
+  let lightboxIndex = 0;
+
+  const normalizeIndex = (index) => (index + photoPaths.length) % photoPaths.length;
+
+  lightboxThumbs.innerHTML = photoPaths
+    .map(
+      (path, index) =>
+        `<button class="lightbox-thumb" type="button" data-index="${index}" aria-label="Abrir foto ${index + 1}">
+          <img src="${path}" alt="Miniatura ${index + 1}" loading="lazy">
+        </button>`
+    )
+    .join('');
+
+  const updateLightbox = () => {
+    const currentPath = photoPaths[lightboxIndex];
+    lightboxImage.src = currentPath;
+    lightboxImage.alt = `Foto completa do servico ${lightboxIndex + 1}`;
+    lightboxCaption.textContent = `Foto ${lightboxIndex + 1} de ${photoPaths.length} - galeria estendida`;
+
+    lightboxThumbs.querySelectorAll('.lightbox-thumb').forEach((thumb) => {
+      const thumbIndex = Number(thumb.dataset.index);
+      thumb.classList.toggle('is-active', thumbIndex === lightboxIndex);
+    });
+
+    const activeThumb = lightboxThumbs.querySelector(`.lightbox-thumb[data-index="${lightboxIndex}"]`);
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  const openLightbox = (index) => {
+    lightboxIndex = normalizeIndex(index);
+    lightbox.hidden = false;
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+    updateLightbox();
+  };
+
+  const closeLightbox = () => {
+    lightbox.hidden = true;
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+  };
+
+  const goToNext = () => {
+    lightboxIndex = normalizeIndex(lightboxIndex + 1);
+    updateLightbox();
+  };
+
+  const goToPrev = () => {
+    lightboxIndex = normalizeIndex(lightboxIndex - 1);
+    updateLightbox();
+  };
+
+  document.addEventListener('click', (event) => {
+    const openTrigger = event.target.closest('.js-open-lightbox');
+    if (openTrigger) {
+      const requestedIndex = Number(openTrigger.dataset.index);
+      if (!Number.isNaN(requestedIndex)) {
+        event.preventDefault();
+        openLightbox(requestedIndex);
+      }
+      return;
+    }
+
+    const closeTrigger = event.target.closest('[data-close-lightbox]');
+    if (closeTrigger) {
+      closeLightbox();
+      return;
+    }
+
+    const thumbTrigger = event.target.closest('.lightbox-thumb');
+    if (thumbTrigger) {
+      const requestedIndex = Number(thumbTrigger.dataset.index);
+      if (!Number.isNaN(requestedIndex)) {
+        lightboxIndex = normalizeIndex(requestedIndex);
+        updateLightbox();
+      }
+    }
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxNext.addEventListener('click', goToNext);
+  lightboxPrev.addEventListener('click', goToPrev);
+
+  document.addEventListener('keydown', (event) => {
+    if (lightbox.hidden) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      closeLightbox();
+    }
+
+    if (event.key === 'ArrowRight') {
+      goToNext();
+    }
+
+    if (event.key === 'ArrowLeft') {
+      goToPrev();
+    }
+  });
 }
