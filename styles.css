@@ -369,8 +369,9 @@ body {
 .gallery-slide img {
   width: 100%;
   height: clamp(270px, 45vw, 430px);
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: #070707;
 }
 
 .gallery-image-link {

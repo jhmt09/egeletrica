@@ -74,7 +74,7 @@ if (galleryTrack && galleryNext && galleryPrev && photoPaths.length > 0) {
     .map(
       (path, index) => `
         <figure class="gallery-slide">
-          <a class="gallery-image-link js-open-lightbox" href="${path}" data-index="${index}" aria-label="Abrir galeria estendida na foto ${index + 1}">
+          <a class="gallery-image-link js-open-lightbox" href="#" data-index="${index}" aria-label="Abrir galeria estendida na foto ${index + 1}">
             <img src="${path}" alt="Galeria de servicos eletricos ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}">
           </a>
           <figcaption>Registro ${index + 1} de ${photoPaths.length}</figcaption>
@@ -134,7 +134,6 @@ if (rotatorImage && rotatorCaption && rotatorLink && photoPaths.length > 0) {
 
     window.setTimeout(() => {
       rotatorImage.src = photoPaths[currentPhoto];
-      rotatorLink.href = photoPaths[currentPhoto];
       rotatorLink.dataset.index = String(currentPhoto);
       rotatorCaption.textContent = `Conheca nosso servico - foto ${currentPhoto + 1} de ${photoPaths.length}`;
       rotatorImage.classList.remove('is-fading');
@@ -221,17 +220,21 @@ if (
     updateLightbox();
   };
 
-  document.addEventListener('click', (event) => {
-    const openTrigger = event.target.closest('.js-open-lightbox');
-    if (openTrigger) {
-      const requestedIndex = Number(openTrigger.dataset.index);
-      if (!Number.isNaN(requestedIndex)) {
+  const bindOpenTriggers = () => {
+    document.querySelectorAll('.js-open-lightbox').forEach((trigger) => {
+      trigger.addEventListener('click', (event) => {
         event.preventDefault();
-        openLightbox(requestedIndex);
-      }
-      return;
-    }
+        const requestedIndex = Number(trigger.dataset.index);
+        if (!Number.isNaN(requestedIndex)) {
+          openLightbox(requestedIndex);
+        }
+      });
+    });
+  };
 
+  bindOpenTriggers();
+
+  document.addEventListener('click', (event) => {
     const closeTrigger = event.target.closest('[data-close-lightbox]');
     if (closeTrigger) {
       closeLightbox();
