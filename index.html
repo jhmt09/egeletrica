@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260511b">
+  <link rel="stylesheet" href="styles.css?v=20260514a">
 </head>
 <body>
   <div class="background-glow" aria-hidden="true"></div>
@@ -21,8 +21,10 @@
       </a>
       <nav class="nav-links" aria-label="Navegacao principal">
         <a href="#servicos">Servicos</a>
+        <a href="#logos-servicos">Logos</a>
         <a href="#galeria">Galeria</a>
         <a href="#conheca">Conheca</a>
+        <a href="#formulario">Formulario</a>
         <a href="#diferenciais">Diferenciais</a>
         <a href="#orcamento">Orcamento</a>
       </nav>
@@ -113,6 +115,20 @@
       </div>
     </section>
 
+    <section id="logos-servicos" class="section logos-section">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="kicker">Experiencia comprovada</p>
+          <h2>Empresas que ja receberam nossos servicos</h2>
+        </header>
+        <div class="logo-carousel reveal">
+          <div class="logo-viewport">
+            <div id="logo-track" class="logo-track"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="galeria" class="section gallery-section">
       <div class="container">
         <header class="section-head reveal">
@@ -163,6 +179,71 @@
       </div>
     </section>
 
+    <section id="formulario" class="section form-section">
+      <div class="container form-wrap reveal">
+        <header class="section-head">
+          <p class="kicker">Solicitacao detalhada</p>
+          <h2>Envie os dados e receba retorno no WhatsApp</h2>
+        </header>
+        <form id="service-request-form" class="service-form">
+          <div class="form-grid">
+            <label class="field">
+              <span>Nome</span>
+              <input type="text" id="client-name" name="nome" required>
+            </label>
+            <label class="field">
+              <span>Numero para contato</span>
+              <input type="tel" id="client-phone" name="telefone" required>
+            </label>
+            <label class="field field-full">
+              <span>Endereco</span>
+              <input type="text" id="client-address" name="endereco" required>
+            </label>
+            <label class="field">
+              <span>Tipo de moradia</span>
+              <select id="housing-type" name="moradia" required>
+                <option value="">Selecione</option>
+                <option>Casa</option>
+                <option>Apartamento</option>
+                <option>Kitnet</option>
+                <option>Sobrado</option>
+                <option>Comercial</option>
+                <option>Outro</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Nivel da solicitacao</span>
+              <select id="request-level" name="nivel" required>
+                <option value="">Selecione</option>
+                <option>Emergencia</option>
+                <option>Urgencia</option>
+                <option>Pouco urgente</option>
+              </select>
+            </label>
+            <label class="field field-full">
+              <span>Tipo de servico a ser prestado</span>
+              <select id="service-type" name="servico" required>
+                <option value="">Selecione</option>
+                <option>Orcamento e levantamento de materiais</option>
+                <option>Somente troca de disjuntor</option>
+                <option>Troca de tomada</option>
+                <option>Instalacao de ponto luminoso</option>
+                <option>Instalacao de disjuntor, DR, IDR, DPS</option>
+                <option>Nova instalacao</option>
+                <option value="Outro (nao listado)">Outro (nao listado)</option>
+              </select>
+            </label>
+            <label class="field field-full">
+              <span>Detalhes do problema (obrigatorio quando selecionar "Outro")</span>
+              <textarea id="service-note" name="detalhes" rows="4" placeholder="Descreva aqui caso as opcoes acima nao supram sua necessidade."></textarea>
+            </label>
+          </div>
+          <p class="form-alert">Se as opcoes nao suprirem sua solicitacao, selecione "Outro (nao listado)" e preencha os detalhes.</p>
+          <button class="btn btn-primary btn-large" type="submit">Enviar solicitacao no WhatsApp</button>
+        </form>
+      </div>
+    </section>
+
     <section id="orcamento" class="section quote-section">
       <div class="container quote-wrap reveal">
         <h2>Solicite seu orcamento agora</h2>
@@ -192,6 +273,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=20260511b"></script>
+  <script src="script.js?v=20260514a"></script>
 </body>
 </html>

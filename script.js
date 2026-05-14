@@ -65,6 +65,39 @@ const photoFiles = [
 
 const photoPaths = photoFiles.map((file) => encodeURI(`images/${file}`));
 
+const logoFiles = [
+  'WhatsApp Image 2026-05-14 at 01.13.57 (1).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (2).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (3).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (4).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (5).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (6).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (7).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (8).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57 (9).jpeg',
+  'WhatsApp Image 2026-05-14 at 01.13.57.jpeg',
+];
+
+const logoPaths = logoFiles.map((file) => encodeURI(`logos/${file}`));
+const logoTrack = document.getElementById('logo-track');
+
+if (logoTrack && logoPaths.length > 0) {
+  const mirroredLogos = [...logoPaths, ...logoPaths];
+
+  logoTrack.innerHTML = mirroredLogos
+    .map(
+      (path, index) => `
+        <figure class="logo-card">
+          <img src="${path}" alt="Logo de cliente atendido ${index % logoPaths.length + 1}" loading="lazy">
+        </figure>
+      `
+    )
+    .join('');
+
+  const autoDuration = Math.max(20, logoPaths.length * 3.4);
+  logoTrack.style.animationDuration = `${autoDuration}s`;
+}
+
 const galleryTrack = document.getElementById('gallery-track');
 const galleryNext = document.getElementById('gallery-next');
 const galleryPrev = document.getElementById('gallery-prev');
@@ -271,5 +304,61 @@ if (
     if (event.key === 'ArrowLeft') {
       goToPrev();
     }
+  });
+}
+
+const requestForm = document.getElementById('service-request-form');
+const nameField = document.getElementById('client-name');
+const phoneField = document.getElementById('client-phone');
+const addressField = document.getElementById('client-address');
+const housingField = document.getElementById('housing-type');
+const levelField = document.getElementById('request-level');
+const serviceField = document.getElementById('service-type');
+const noteField = document.getElementById('service-note');
+
+if (requestForm && nameField && phoneField && addressField && housingField && levelField && serviceField && noteField) {
+  const updateConditionalRequirement = () => {
+    const shouldRequireNote = serviceField.value === 'Outro (nao listado)';
+    noteField.required = shouldRequireNote;
+  };
+
+  serviceField.addEventListener('change', updateConditionalRequirement);
+  updateConditionalRequirement();
+
+  requestForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const nameValue = nameField.value.trim();
+    const phoneValue = phoneField.value.trim();
+    const addressValue = addressField.value.trim();
+    const housingValue = housingField.value.trim();
+    const levelValue = levelField.value.trim();
+    const serviceValue = serviceField.value.trim();
+    const noteValue = noteField.value.trim();
+
+    if (serviceValue === 'Outro (nao listado)' && !noteValue) {
+      alert('Descreva o problema no campo de detalhes para concluir o envio.');
+      noteField.focus();
+      return;
+    }
+
+    const messageLines = [
+      'Ola! Quero solicitar atendimento eletrico.',
+      '',
+      `Nome: ${nameValue}`,
+      `Numero para contato: ${phoneValue}`,
+      `Endereco: ${addressValue}`,
+      `Tipo de moradia: ${housingValue}`,
+      `Nivel da solicitacao: ${levelValue}`,
+      `Tipo de servico: ${serviceValue}`,
+    ];
+
+    if (noteValue) {
+      messageLines.push(`Detalhes adicionais: ${noteValue}`);
+    }
+
+    const message = encodeURIComponent(messageLines.join('\n'));
+    const whatsappUrl = `https://wa.me/5562994271435?text=${message}`;
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   });
 }
